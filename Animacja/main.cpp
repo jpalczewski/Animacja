@@ -38,23 +38,23 @@ int main()
 		if (glewInit() != GLEW_OK)
 			throw std::runtime_error("glewInit() failed");
 
-		ShaderCompiler shader("ground.vert", "animation.frag");
+		ShaderCompiler shaderGround("ground.vert", "ground.frag");
 		
 
-		MatrixWrapper	model(shader.GetProgramID(), "model"),
-						projection(shader.GetProgramID(), "projection");
+		MatrixWrapper	model(shaderGround.GetProgramID(), "model"),
+						projection(shaderGround.GetProgramID(), "projection");
 
 		model.mat4	= glm::rotate(model.mat4, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		projection.mat4 = glm::perspective(glm::radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
 
-		Camera camera(90.0f, 180.0f, 0.0f, 360.0f, 5.0f, shader.GetProgramID(), 25.0f);
+		Camera camera(90.0f, 180.0f, 0.0f, 360.0f, 5.0f, shaderGround.GetProgramID(), 25.0f);
 		camera.UpdateTargetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
 		model.mat4 = glm::scale(model.mat4, glm::vec3(10.0f, 10.0f, 0.0f));
 
-		Ground ground(shader.GetProgramID(), 8);
+		Ground ground(shaderGround.GetProgramID(), 8);
 
-		TextureWrapper groundTexture(GL_TEXTURE0, shader.GetProgramID(), "ground.png", "Texture0");
+		TextureWrapper groundTexture(GL_TEXTURE0, shaderGround.GetProgramID(), "ground.png", "Texture0");
 
 		keyboardManager.RegisterKey(GLFW_KEY_ESCAPE, std::bind(glfwSetWindowShouldClose, window, GL_TRUE));
 		keyboardManager.RegisterKey(GLFW_KEY_H, std::bind(&Camera::YawDown, std::ref(camera)));
@@ -79,7 +79,7 @@ int main()
 
 			groundTexture.SendToGPU();
 
-			shader.Execute();
+			shaderGround.Execute();
 
 			camera.SendUpdatedMatrix();
 			projection.SendToGPU();
