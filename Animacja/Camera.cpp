@@ -43,6 +43,16 @@ void Camera::PitchDown()
 		pitch = minPitch;
 }
 
+void Camera::DistanceUp()
+{
+	distance += step * JPGLHelper::deltaTime;
+}
+
+void Camera::DistanceDown()
+{
+	distance -= step * JPGLHelper::deltaTime;
+}
+
 void Camera::UpdateShader(GLuint _shaderID)
 {
 	view.SetShader(_shaderID);

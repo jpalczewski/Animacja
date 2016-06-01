@@ -29,6 +29,8 @@ public:
 	void YawDown();
 	void PitchUp();
 	void PitchDown();
+	void DistanceUp();
+	void DistanceDown();
 
 	void UpdateShader(GLuint _shaderID);
 	void UpdateTargetPosition(glm::vec3 & targetPos);

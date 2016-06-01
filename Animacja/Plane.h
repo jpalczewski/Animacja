@@ -5,14 +5,17 @@
 
 #include "MatrixWrapper.h"
 
-class Ground
+class Plane
 {
 	GLuint VAO;
 	GLuint VBO;
-	std::vector < std::vector<GLfloat> > vertices;
+	GLuint EBO;
+	GLuint verticesPerSide;
+	std::vector <GLfloat> vertices;
+	std::vector <GLuint> indexes;
 public:
-	Ground(GLuint _shaderID);
-	~Ground();
+	Plane(GLuint _shaderID, GLuint _verticesPerSide);
+	~Plane();
 
 	void Draw(MatrixWrapper & model);
 };
