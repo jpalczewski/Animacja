@@ -70,7 +70,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Plane.cpp" />
     <ClCompile Include="JPGLHelper.cpp" />
     <ClCompile Include="KeyboardManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -78,15 +78,19 @@
     <ClCompile Include="ShaderCompiler.cpp" />
     <ClCompile Include="testbuild.cpp" />
     <ClCompile Include="TextureWrapper.cpp" />
+    <ClCompile Include="Train.cpp" />
+    <ClCompile Include="TrainWall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Ground.h" />
+    <ClInclude Include="Plane.h" />
     <ClInclude Include="JPGLHelper.h" />
     <ClInclude Include="KeyboardManager.h" />
     <ClInclude Include="MatrixWrapper.h" />
     <ClInclude Include="ShaderCompiler.h" />
     <ClInclude Include="TextureWrapper.h" />
+    <ClInclude Include="Train.h" />
+    <ClInclude Include="TrainWall.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ground.frag" />

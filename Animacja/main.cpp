@@ -13,7 +13,7 @@
 #include "JPGLHelper.h"
 #include "KeyboardManager.h"
 #include "MatrixWrapper.h"
-#include "Ground.h"
+#include "Plane.h"
 #include "TextureWrapper.h"
 #include "Camera.h"
 
@@ -45,14 +45,16 @@ int main()
 						projection(shaderGround.GetProgramID(), "projection");
 
 		model.mat4	= glm::rotate(model.mat4, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		projection.mat4 = glm::perspective(glm::radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
+		projection.mat4 = glm::perspective(glm::radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 500.0f);
 
-		Camera camera(90.0f, 180.0f, 0.0f, 360.0f, 5.0f, shaderGround.GetProgramID(), 25.0f);
+		//Camera camera(90.0f, 180.0f, 0.0f, 360.0f, 5.0f, shaderGround.GetProgramID(), 25.0f);
+		Camera camera(0.0f, 180.0f, 0.0f, 360.0f, 5.0f, shaderGround.GetProgramID(), 25.0f);
+
 		camera.UpdateTargetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
-		model.mat4 = glm::scale(model.mat4, glm::vec3(10.0f, 10.0f, 0.0f));
-
-		Ground ground(shaderGround.GetProgramID(), 8);
+		model.mat4 = glm::scale(model.mat4, glm::vec3(10.0f, 10.0f, 0));
+		
+		Plane ground(shaderGround.GetProgramID(),64);
 
 		TextureWrapper groundTexture(GL_TEXTURE0, shaderGround.GetProgramID(), "ground.png", "Texture0");
 
@@ -61,6 +63,9 @@ int main()
 		keyboardManager.RegisterKey(GLFW_KEY_J, std::bind(&Camera::PitchDown, std::ref(camera)));
 		keyboardManager.RegisterKey(GLFW_KEY_K, std::bind(&Camera::PitchUp, std::ref(camera)));
 		keyboardManager.RegisterKey(GLFW_KEY_L, std::bind(&Camera::YawUp, std::ref(camera)));
+		keyboardManager.RegisterKey(GLFW_KEY_U, std::bind(&Camera::DistanceUp, std::ref(camera)));
+		keyboardManager.RegisterKey(GLFW_KEY_I, std::bind(&Camera::DistanceDown, std::ref(camera)));
+
 
 		glEnable(GL_MULTISAMPLE);
 		glEnable(GL_DEPTH_TEST);
@@ -74,7 +79,7 @@ int main()
 			glfwPollEvents();
 			keyboardManager.ProcessKeys();
 			
-			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			groundTexture.SendToGPU();
