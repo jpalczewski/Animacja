@@ -7,8 +7,10 @@
 
 class Ground
 {
+	GLuint shaderID;
+	int multiply;
 	GLuint VAO;
-	GLuint VBO;
+	std::vector<GLuint> VBOs;
 	std::vector < std::vector<GLfloat> > vertices;
 public:
 	Ground(GLuint _shaderID, int multiply);

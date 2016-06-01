@@ -70,10 +70,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="animation.frag">
+    <None Include="ground.frag">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="animation.vert">
+    <None Include="ground.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

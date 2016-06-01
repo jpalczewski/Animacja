@@ -17,15 +17,15 @@ Camera::~Camera()
 void Camera::YawUp()
 {
 	yaw += step * JPGLHelper::deltaTime;
-	if (yaw > maxYaw)
-		yaw = maxYaw;
+	//if (yaw > maxYaw)
+	//	yaw = maxYaw;
 }
 
 void Camera::YawDown()
 {
 	yaw -= step * JPGLHelper::deltaTime;
-	if (yaw < minYaw)
-		yaw = minYaw;
+	//if (yaw < minYaw)
+	//	yaw = minYaw;
 }
 
 void Camera::PitchUp()

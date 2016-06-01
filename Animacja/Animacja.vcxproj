@@ -89,8 +89,8 @@
     <ClInclude Include="TextureWrapper.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="animation.frag" />
-    <None Include="animation.vert" />
+    <None Include="ground.frag" />
+    <None Include="ground.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
