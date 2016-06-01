@@ -7,13 +7,11 @@
 
 class Ground
 {
-	int shaderID;
-	int multiply;
 	GLuint VAO;
-	std::vector<GLuint> VBOs;
+	GLuint VBO;
 	std::vector < std::vector<GLfloat> > vertices;
 public:
-	Ground(GLuint _shaderID, int multiply);
+	Ground(GLuint _shaderID);
 	~Ground();
 
 	void Draw(MatrixWrapper & model);
