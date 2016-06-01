@@ -45,16 +45,16 @@ int main()
 						projection(shaderGround.GetProgramID(), "projection");
 
 		model.mat4	= glm::rotate(model.mat4, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		projection.mat4 = glm::perspective(glm::radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
+		projection.mat4 = glm::perspective(glm::radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 500.0f);
 
 		//Camera camera(90.0f, 180.0f, 0.0f, 360.0f, 5.0f, shaderGround.GetProgramID(), 25.0f);
 		Camera camera(0.0f, 180.0f, 0.0f, 360.0f, 5.0f, shaderGround.GetProgramID(), 25.0f);
 
 		camera.UpdateTargetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
-		model.mat4 = glm::scale(model.mat4, glm::vec3(1.0f, 1.0f, 0));
+		model.mat4 = glm::scale(model.mat4, glm::vec3(10.0f, 10.0f, 0));
 		
-		Plane ground(shaderGround.GetProgramID(),32);
+		Plane ground(shaderGround.GetProgramID(),64);
 
 		TextureWrapper groundTexture(GL_TEXTURE0, shaderGround.GetProgramID(), "ground.png", "Texture0");
 

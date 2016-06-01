@@ -11,7 +11,7 @@ static GLfloat rectangle[] = {
 Plane::Plane(GLuint _shaderID, GLuint _verticesPerSide) : verticesPerSide(_verticesPerSide)
 {
 	std::array<GLfloat, 2> texCoord_x = { 0.0f, 1.0f };
-	std::array<GLfloat, 2> texCoord_y = { 0.0f, 1.0f };
+	std::array<GLfloat, 2> texCoord_y = { 1.0f, 0.0f };
 
 	GLint texAttrib, posAttrib;
 	
@@ -24,7 +24,7 @@ Plane::Plane(GLuint _shaderID, GLuint _verticesPerSide) : verticesPerSide(_verti
 	GLfloat positionRange = 10.0f;
 
 	GLfloat xPos, yPos, xRatio, yRatio;
-	glm::vec3 normal = glm::normalize(glm::cross(glm::vec3(1.0f,0.0f,0.0f),  glm::vec3(0.0,0.0,1.0)));
+	glm::vec3 normal = glm::normalize(glm::cross(glm::vec3(1.0f,0.0f,0.0f),  glm::vec3(0.0,1.0,0.0)));
 
 	vertices.resize(vertexTableSize, 0.0f);
 	
@@ -69,8 +69,8 @@ Plane::Plane(GLuint _shaderID, GLuint _verticesPerSide) : verticesPerSide(_verti
 			vertices[offset++] = normal.x;
 			vertices[offset++] = normal.y;
 			vertices[offset++] = normal.z;
-			vertices[offset++] = texCoord_x[0];
-			vertices[offset++] = texCoord_x[0];
+			vertices[offset++] = texCoord_x[x%2];
+			vertices[offset++] = texCoord_y[y%2];
 
 		}
 
@@ -80,10 +80,10 @@ Plane::Plane(GLuint _shaderID, GLuint _verticesPerSide) : verticesPerSide(_verti
 
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size(), &vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(GLfloat), &(vertices[0]), GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER , EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size(), &indexes[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexes.size()*sizeof(GLuint), &(indexes[0]), GL_STATIC_DRAW);
 
 	posAttrib = glGetAttribLocation(_shaderID, "position");
 	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, floatsPerVertex * sizeof(GLfloat), (GLvoid*)0);

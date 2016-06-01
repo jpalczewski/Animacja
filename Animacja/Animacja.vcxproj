@@ -78,6 +78,8 @@
     <ClCompile Include="ShaderCompiler.cpp" />
     <ClCompile Include="testbuild.cpp" />
     <ClCompile Include="TextureWrapper.cpp" />
+    <ClCompile Include="Train.cpp" />
+    <ClCompile Include="TrainWall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -87,6 +89,8 @@
     <ClInclude Include="MatrixWrapper.h" />
     <ClInclude Include="ShaderCompiler.h" />
     <ClInclude Include="TextureWrapper.h" />
+    <ClInclude Include="Train.h" />
+    <ClInclude Include="TrainWall.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ground.frag" />
