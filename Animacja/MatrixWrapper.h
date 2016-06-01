@@ -14,9 +14,10 @@ class MatrixWrapper
 public:
 	glm::mat4 mat4;
 	
+	MatrixWrapper() {};
 	MatrixWrapper(GLuint _shaderID, const char* nameInGPU);
 	~MatrixWrapper();
-
+	
 
 	void SetShader(GLuint _shaderID);
 	void SendToGPU();

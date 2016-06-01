@@ -17,6 +17,8 @@
 #include "TextureWrapper.h"
 #include "Camera.h"
 
+#include "Train.h"
+
 const int HEIGHT = 800;
 const int WIDTH = 600;
 
@@ -39,22 +41,23 @@ int main()
 			throw std::runtime_error("glewInit() failed");
 
 		ShaderCompiler shaderGround("ground.vert", "ground.frag");
-		
+		ShaderCompiler shaderTrain("train.vert", "train.frag");
 
-		MatrixWrapper	model(shaderGround.GetProgramID(), "model"),
+		MatrixWrapper	modelPlane(shaderGround.GetProgramID(), "model"),
+			modelWall(shaderTrain.GetProgramID(), "model"),
 						projection(shaderGround.GetProgramID(), "projection");
 
-		model.mat4	= glm::rotate(model.mat4, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		modelPlane.mat4	= glm::rotate(modelPlane.mat4, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		projection.mat4 = glm::perspective(glm::radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 500.0f);
 
-		//Camera camera(90.0f, 180.0f, 0.0f, 360.0f, 5.0f, shaderGround.GetProgramID(), 25.0f);
-		Camera camera(0.0f, 180.0f, 0.0f, 360.0f, 5.0f, shaderGround.GetProgramID(), 25.0f);
-
+		Camera camera(-180.0f, 180.0f, 0.0f, 360.0f, 5.0f, shaderGround.GetProgramID(), 25.0f);
+		
 		camera.UpdateTargetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
-		model.mat4 = glm::scale(model.mat4, glm::vec3(10.0f, 10.0f, 0));
-		
-		Plane ground(shaderGround.GetProgramID(),64);
+		modelPlane.mat4 = glm::scale(modelPlane.mat4, glm::vec3(10.0f, 10.0f, 0));
+		modelWall.mat4 = glm::mat4(1.0f);
+		Plane ground(shaderGround.GetProgramID(),32);
+		Train train(shaderTrain.GetProgramID());
 
 		TextureWrapper groundTexture(GL_TEXTURE0, shaderGround.GetProgramID(), "ground.png", "Texture0");
 
@@ -69,6 +72,7 @@ int main()
 
 		glEnable(GL_MULTISAMPLE);
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
 
 		while (!glfwWindowShouldClose(window))
 		{
@@ -82,15 +86,42 @@ int main()
 			glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			/*
+			
+				rysowanie p³aszczyzny
+
+			*/
+
 			groundTexture.SendToGPU();
 
 			shaderGround.Execute();
 
+			camera.UpdateShader(shaderGround.GetProgramID());
 			camera.SendUpdatedMatrix();
+			
+			projection.SetShader(shaderGround.GetProgramID());
 			projection.SendToGPU();
 
-			ground.Draw(model);
+			ground.Draw(modelPlane);
 
+
+			/*
+			
+				rysowanie poci¹gu
+			
+			*/
+
+			shaderTrain.Execute();
+			
+			camera.UpdateShader(shaderGround.GetProgramID());
+			camera.SendUpdatedMatrix();
+			
+			projection.SetShader(shaderTrain.GetProgramID());
+			projection.SendToGPU();
+
+			
+			train.Draw();
+			
 			glfwSwapBuffers(window);
 		}
 
