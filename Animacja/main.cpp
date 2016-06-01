@@ -51,8 +51,8 @@ int main()
 		camera.UpdateTargetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
 		model.mat4 = glm::scale(model.mat4, glm::vec3(10.0f, 10.0f, 0.0f));
-
-		Ground ground(shaderGround.GetProgramID(), 8);
+		
+		Ground ground(shaderGround.GetProgramID(), 1);
 
 		TextureWrapper groundTexture(GL_TEXTURE0, shaderGround.GetProgramID(), "ground.png", "Texture0");
 

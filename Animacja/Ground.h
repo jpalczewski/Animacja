@@ -7,7 +7,7 @@
 
 class Ground
 {
-	GLuint shaderID;
+	int shaderID;
 	int multiply;
 	GLuint VAO;
 	std::vector<GLuint> VBOs;
@@ -18,4 +18,3 @@ public:
 
 	void Draw(MatrixWrapper & model);
 };
-

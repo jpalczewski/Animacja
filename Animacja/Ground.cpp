@@ -92,11 +92,11 @@ void Ground::Draw(MatrixWrapper & model)
 	for (int i = 0; i < multiply; ++i)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, VBOs[i]);
-		posAttrib = glGetAttribLocation(shaderID, "position");
+		posAttrib = glGetAttribLocation(_shaderID, "position");
 		glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 		glEnableVertexAttribArray(posAttrib);
 
-		texAttrib = glGetAttribLocation(shaderID, "texCoord");
+		texAttrib = glGetAttribLocation(_shaderID, "texCoord");
 		glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 		glEnableVertexAttribArray(texAttrib);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, (GLuint)vertices[i].size());
