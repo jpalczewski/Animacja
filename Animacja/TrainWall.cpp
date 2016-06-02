@@ -8,7 +8,7 @@ TrainWall::TrainWall(GLuint _shaderID, GLuint _verticesPerSide)
 	GLuint	xSize = _verticesPerSide,
 		ySize = _verticesPerSide,
 		floatsPerVertex = 3 + 3 + 3,
-		vertexTableSize = xSize*ySize*floatsPerVertex; // 3 for vertex coord + 2 tex coords.
+		vertexTableSize = xSize*ySize*floatsPerVertex; 
 
 	GLfloat minimumPosition = -5.0f;
 	GLfloat positionRange = 10.0f;

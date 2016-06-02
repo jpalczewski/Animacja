@@ -80,6 +80,7 @@
     <ClCompile Include="TextureWrapper.cpp" />
     <ClCompile Include="Train.cpp" />
     <ClCompile Include="TrainWall.cpp" />
+    <ClCompile Include="Truss.cpp" />
     <ClCompile Include="Wheel.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +93,7 @@
     <ClInclude Include="TextureWrapper.h" />
     <ClInclude Include="Train.h" />
     <ClInclude Include="TrainWall.h" />
+    <ClInclude Include="Truss.h" />
     <ClInclude Include="Wheel.h" />
   </ItemGroup>
   <ItemGroup>

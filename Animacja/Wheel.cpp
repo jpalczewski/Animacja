@@ -5,7 +5,6 @@
 
 static  inline void addVertex(std::vector<GLfloat> & where, GLfloat x, GLfloat y, GLfloat z, GLfloat normalX, GLfloat normalY, GLfloat normalZ, GLfloat colorR, GLfloat colorG, GLfloat colorB)
 {
-	std::vector<GLfloat>::iterator it;
 	where.push_back(x);
 	where.push_back(y);
 	where.push_back(z);
