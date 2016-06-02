@@ -1,4 +1,5 @@
 #include "Train.h"
+#include "JPGLHelper.h"
 #include <glm/gtx/transform.hpp>
 
 Train::Train(GLuint _shaderID) : shaderID(_shaderID)
@@ -54,9 +55,35 @@ void Train::Draw()
 
 	for (int i = 0; i < 6; ++i)
 	{
-		model.mat4 = models[i];
-	//	model.mat4 = glm::translate(model.mat4, location);
+		model.mat4 = glm::mat4();
+		model.mat4 = glm::translate(model.mat4, location);
+		model.mat4 *= models[i];
 		walls[i].Draw(model);
 	}
 
+}
+
+void Train::Go()
+{
+
+	speedAngle += 15 * JPGLHelper::deltaTime;
+	if (speedAngle > 90.0f)
+		speedAngle = 90.0f;
+}
+
+void Train::Back()
+{
+
+	speedAngle -= 15 * JPGLHelper::deltaTime;
+	if (speedAngle < -90.0f)
+		speedAngle = -90.0f;
+}
+
+void Train::DoPhysics()
+{
+	const GLfloat step = 300;
+	location.x += step*glm::sin(glm::radians(speedAngle))*JPGLHelper::deltaTime;
+
+	if (glm::abs(speedAngle) > 0.0000005)
+		speedAngle -= speedAngle  * JPGLHelper::deltaTime;
 }

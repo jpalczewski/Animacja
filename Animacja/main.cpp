@@ -69,6 +69,8 @@ int main()
 		keyboardManager.RegisterKey(GLFW_KEY_U, std::bind(&Camera::DistanceUp, std::ref(camera)));
 		keyboardManager.RegisterKey(GLFW_KEY_I, std::bind(&Camera::DistanceDown, std::ref(camera)));
 
+		keyboardManager.RegisterKey(GLFW_KEY_A, std::bind(&Train::Go, std::ref(train)));
+		keyboardManager.RegisterKey(GLFW_KEY_Z, std::bind(&Train::Back, std::ref(train)));
 
 		glEnable(GL_MULTISAMPLE);
 		glEnable(GL_DEPTH_TEST);
@@ -83,6 +85,9 @@ int main()
 			glfwPollEvents();
 			keyboardManager.ProcessKeys();
 			
+			camera.UpdateTargetPosition(train.GetLocation());
+			train.DoPhysics();
+
 			glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

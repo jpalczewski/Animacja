@@ -18,6 +18,7 @@ class Train
 	glm::mat4 finalModel;
 
 	glm::vec3 location;
+	GLfloat speedAngle;
 public:
 	Train(GLuint _shaderID);
 	~Train();
@@ -25,5 +26,9 @@ public:
 	void Draw();
 
 	glm::vec3 & GetLocation() { return location; }
+
+	void Go();
+	void Back();
+	void DoPhysics();
 };
 
