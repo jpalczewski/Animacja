@@ -3,22 +3,28 @@
 #include <vector>
 #include <GL/glew.h>
 #include "MatrixWrapper.h"
-#include "TrainWall.h"
 
+#include "TrainWall.h"
+#include "Wheel.h"
 
 class Train
 {
+	const int MODEL_WHEEL_OFFSET = 6;
 	enum Side {FRONT=0, BACK, TOP, BOTTOM, LEFT, RIGHT};
-
+	enum WheelNum { FRONT_LEFT=0, FRONT_RIGHT, BACK_LEFT, BACK_RIGHT};
 	GLuint shaderID;
 
 	std::vector<TrainWall> walls;
+	std::vector<Wheel> wheels;
+
 	std::vector<glm::mat4> models;
 
 	glm::mat4 finalModel;
 
 	glm::vec3 location;
 	GLfloat speedAngle;
+	std::vector<GLfloat> wheelRotation;
+	GLfloat rotation;
 public:
 	Train(GLuint _shaderID);
 	~Train();

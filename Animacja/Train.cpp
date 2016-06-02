@@ -1,17 +1,25 @@
 #include "Train.h"
 #include "JPGLHelper.h"
 #include <glm/gtx/transform.hpp>
+#include "KeyboardManager.h"
+
+extern KeyboardManager keyboardManager;
 
 Train::Train(GLuint _shaderID) : shaderID(_shaderID)
 {
-	location = glm::vec3(0.0f, 15.0f, 0.0f);
+	location = glm::vec3(0.0f,9.0f, 0.0f);
 
 	walls.resize(6);
-	models.resize(6);
+	models.resize(6 + 4);
+	wheels.resize(4);
+	wheelRotation.resize(4);
 
 	for (int i = 0; i < 6; i++)
 		walls[i] = TrainWall(_shaderID, 16);
 	
+	for (int i = 0; i < 4; ++i)
+		wheels[i] = Wheel(256, _shaderID);
+
 	models[FRONT] = glm::translate(models[FRONT], glm::vec3(0.0f, 0.0f, 5.0f));
 
 	models[BACK] = glm::rotate(models[BACK], glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -28,6 +36,13 @@ Train::Train(GLuint _shaderID) : shaderID(_shaderID)
 	
 	models[BOTTOM] = glm::rotate(models[BOTTOM], glm::radians(90.0f), glm::vec3(1.0f, 0, 0));
 	models[BOTTOM] = glm::translate(models[BOTTOM], glm::vec3(0.0f, 0.0f, 5.0f));
+
+	models[MODEL_WHEEL_OFFSET + FRONT_LEFT] = translate(models[MODEL_WHEEL_OFFSET + FRONT_LEFT],glm::vec3(5.0f, -5.0f, 5.5f));
+	models[MODEL_WHEEL_OFFSET + FRONT_RIGHT] = translate(models[MODEL_WHEEL_OFFSET + FRONT_RIGHT], glm::vec3(5.0f, -5.0f, -5.5f));
+
+	models[MODEL_WHEEL_OFFSET + BACK_LEFT] = translate(models[MODEL_WHEEL_OFFSET + BACK_LEFT], glm::vec3(-5.0f, -5.0f, 5.5f));
+	models[MODEL_WHEEL_OFFSET + BACK_RIGHT] = translate(models[MODEL_WHEEL_OFFSET + BACK_RIGHT], glm::vec3(-5.0f, -5.0f, -5.5f));
+
 }
 
 Train::~Train()
@@ -38,45 +53,47 @@ void Train::Draw()
 {
 	MatrixWrapper model(shaderID, "model");
 
-	/*model.mat4 = models[FRONT];
-	walls[FRONT].Draw(model);
 
-	model.mat4 = models[BACK];
-	walls[BACK].Draw(model);
-
-	model.mat4 = models[TOP];
-	walls[TOP].Draw(model);
-
-	model.mat4 = models[LEFT];
-	walls[LEFT].Draw(model);
-
-	model.mat4 = models[RIGHT];
-	walls[RIGHT].Draw(model);*/
-
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
 		model.mat4 = glm::mat4();
 		model.mat4 = glm::translate(model.mat4, location);
 		model.mat4 *= models[i];
-		walls[i].Draw(model);
+		if (i < 6)
+			walls[i].Draw(model);
+		else if (i < 10)
+		{
+			model.mat4 = glm::rotate(model.mat4, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+			wheels[i - 6].Draw(model);
+		}
 	}
 
 }
 
 void Train::Go()
 {
-
 	speedAngle += 15 * JPGLHelper::deltaTime;
+	rotation -= speedAngle;
+
 	if (speedAngle > 90.0f)
 		speedAngle = 90.0f;
+
+	if (rotation >= 360.f)
+		rotation -= 360.0f;
 }
 
 void Train::Back()
 {
 
+
 	speedAngle -= 15 * JPGLHelper::deltaTime;
+	rotation -= speedAngle;
+
 	if (speedAngle < -90.0f)
 		speedAngle = -90.0f;
+
+	if (rotation >= 360.f)
+		rotation -= 360.0f;
 }
 
 void Train::DoPhysics()
@@ -84,6 +101,10 @@ void Train::DoPhysics()
 	const GLfloat step = 300;
 	location.x += step*glm::sin(glm::radians(speedAngle))*JPGLHelper::deltaTime;
 
+	if (!keyboardManager.keys[GLFW_KEY_A] && !keyboardManager.keys[GLFW_KEY_Z])
 	if (glm::abs(speedAngle) > 0.0000005)
+	{
 		speedAngle -= speedAngle  * JPGLHelper::deltaTime;
+		rotation -= (rotation)*speedAngle*JPGLHelper::deltaTime;
+	}
 }

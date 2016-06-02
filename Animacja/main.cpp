@@ -18,6 +18,7 @@
 #include "Camera.h"
 
 #include "Train.h"
+#include "Wheel.h"
 
 const int HEIGHT = 800;
 const int WIDTH = 600;
@@ -44,7 +45,7 @@ int main()
 		ShaderCompiler shaderTrain("train.vert", "train.frag");
 
 		MatrixWrapper	modelPlane(shaderGround.GetProgramID(), "model"),
-			modelWall(shaderTrain.GetProgramID(), "model"),
+			modelIdentity(shaderTrain.GetProgramID(), "model"),
 						projection(shaderGround.GetProgramID(), "projection");
 
 		modelPlane.mat4	= glm::rotate(modelPlane.mat4, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -55,10 +56,11 @@ int main()
 		camera.UpdateTargetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
 		modelPlane.mat4 = glm::scale(modelPlane.mat4, glm::vec3(10.0f, 10.0f, 0));
-		modelWall.mat4 = glm::mat4(1.0f);
+		modelIdentity.mat4 = glm::mat4(1.0f);
+		
 		Plane ground(shaderGround.GetProgramID(),32);
 		Train train(shaderTrain.GetProgramID());
-
+			
 		TextureWrapper groundTexture(GL_TEXTURE0, shaderGround.GetProgramID(), "ground.png", "Texture0");
 
 		keyboardManager.RegisterKey(GLFW_KEY_ESCAPE, std::bind(glfwSetWindowShouldClose, window, GL_TRUE));
@@ -126,6 +128,9 @@ int main()
 
 			
 			train.Draw();
+
+			modelIdentity.SendToGPU();
+
 			
 			glfwSwapBuffers(window);
 		}
