@@ -10,15 +10,18 @@ Train::Train(GLuint _shaderID) : shaderID(_shaderID)
 	location = glm::vec3(0.0f,9.0f, 0.0f);
 
 	walls.resize(6);
-	models.resize(6 + 4);
+	models.resize(6 + 4 + 2);
 	wheels.resize(4);
-	wheelRotation.resize(4);
+	truss.resize(2);
 
 	for (int i = 0; i < 6; i++)
 		walls[i] = TrainWall(_shaderID, 16);
 	
 	for (int i = 0; i < 4; ++i)
 		wheels[i] = Wheel(256, _shaderID);
+
+	for (int i = 0; i < 2; ++i)
+		truss[i] = Truss(_shaderID);
 
 	models[FRONT] = glm::translate(models[FRONT], glm::vec3(0.0f, 0.0f, 5.0f));
 
@@ -43,6 +46,9 @@ Train::Train(GLuint _shaderID) : shaderID(_shaderID)
 	models[MODEL_WHEEL_OFFSET + BACK_LEFT] = translate(models[MODEL_WHEEL_OFFSET + BACK_LEFT], glm::vec3(-5.0f, -5.0f, 5.5f));
 	models[MODEL_WHEEL_OFFSET + BACK_RIGHT] = translate(models[MODEL_WHEEL_OFFSET + BACK_RIGHT], glm::vec3(-5.0f, -5.0f, -5.5f));
 
+	models[MODEL_TRUSS_OFFSET + TLEFT] = glm::translate(models[MODEL_TRUSS_OFFSET + TLEFT], glm::vec3(0.0f, -5.0f, -6.5f));
+	models[MODEL_TRUSS_OFFSET + TRIGHT] = glm::translate(models[MODEL_TRUSS_OFFSET + TRIGHT], glm::vec3(0.0f, -5.0f, 6.5f));
+
 }
 
 Train::~Train()
@@ -54,7 +60,7 @@ void Train::Draw()
 	MatrixWrapper model(shaderID, "model");
 
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 12; ++i)
 	{
 		model.mat4 = glm::mat4();
 		model.mat4 = glm::translate(model.mat4, location);
@@ -66,7 +72,20 @@ void Train::Draw()
 			model.mat4 = glm::rotate(model.mat4, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
 			wheels[i - 6].Draw(model);
 		}
+		else
+		{
+			model.mat4 = glm::translate(model.mat4, 
+				glm::vec3(
+				glm::cos(glm::radians(rotation))*3.0f,
+				glm::sin(glm::radians(rotation))*3.0f,
+				0.0f
+							)
+				);
+			truss[i - 10].Draw(model);
+		}
 	}
+
+
 
 }
 

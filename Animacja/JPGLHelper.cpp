@@ -17,7 +17,7 @@ GLFWwindow* JPGLHelper::InitEverything(int width, int height)
 		    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 		    glfwWindowHint(GLFW_DEPTH_BITS, 32);
-			glfwWindowHint(GLFW_SAMPLES, 4);
+			glfwWindowHint(GLFW_SAMPLES, 16);
 		    window = glfwCreateWindow( width,height, "openGL", nullptr, nullptr);
 		    glfwMakeContextCurrent(window);
 		    glfwSwapInterval(1);

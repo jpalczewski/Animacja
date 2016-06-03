@@ -14,7 +14,7 @@ class Truss
 	std::vector<GLfloat> vertices;
 	std::vector<GLuint>	indexes;
 public:
-
+	Truss() {};
 	Truss(GLuint _shaderID);
 	void Draw(MatrixWrapper & mw);
 	~Truss();

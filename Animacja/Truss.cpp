@@ -17,7 +17,10 @@ static  inline void addVertex(std::vector<GLfloat> & where, GLfloat x, GLfloat y
 
 Truss::Truss(GLuint _shaderID)
 {
+	glGetError();
 	GLuint posAttrib, colorsAttrib, floatsPerVertex = 9;
+
+	vertices.reserve(8);
 
 	addVertex(vertices, 5.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
 	addVertex(vertices, 5.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f);
@@ -29,11 +32,31 @@ Truss::Truss(GLuint _shaderID)
 	addVertex(vertices, -5.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 	addVertex(vertices, -5.5f, 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
 	addVertex(vertices, -5.5f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f);
-	indexes = { 0, 1, 2};
+	indexes = { 0, 1, 2,
+	2,3,0,
+
+	6,5,4,
+	4,7,6,
+
+	3,2,6,
+	6,7,3,
+
+	0,4,5,
+	5,1,0,
+
+	0,3,7,
+	7,4,0,
+
+	5,6,2,
+	2,1,5,
+
+	};
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(GLfloat), &(vertices[0]), GL_STATIC_DRAW);
@@ -49,17 +72,24 @@ Truss::Truss(GLuint _shaderID)
 	glVertexAttribPointer(colorsAttrib, 3, GL_FLOAT, GL_FALSE, floatsPerVertex * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(colorsAttrib);
 
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	
 }
 
 void Truss::Draw(MatrixWrapper& mw)
 {
+	mw.SendToGPU();
+
 	glBindVertexArray(VAO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		mw.SendToGPU();
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	
 		glDrawElements(GL_TRIANGLES, indexes.size(), GL_UNSIGNED_INT, 0);
+	
+
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
 

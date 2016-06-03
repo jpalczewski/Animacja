@@ -60,8 +60,7 @@ int main()
 		
 		Plane ground(shaderGround.GetProgramID(),32);
 		Train train(shaderTrain.GetProgramID());
-		Truss t(shaderTrain.GetProgramID());
-		modelIdentity.mat4 = glm::scale(modelIdentity.mat4, glm::vec3(20.0f, 20.0f, 20.0f));
+	
 		TextureWrapper groundTexture(GL_TEXTURE0, shaderGround.GetProgramID(), "ground.png", "Texture0");
 
 		keyboardManager.RegisterKey(GLFW_KEY_ESCAPE, std::bind(glfwSetWindowShouldClose, window, GL_TRUE));
@@ -110,7 +109,7 @@ int main()
 			projection.SetShader(shaderGround.GetProgramID());
 			projection.SendToGPU();
 
-				//ground.Draw(modelPlane);
+			ground.Draw(modelPlane);
 
 
 			/*
@@ -130,9 +129,7 @@ int main()
 			
 			train.Draw();
 
-			//modelIdentity.SendToGPU();
-
-			t.Draw(modelIdentity);
+		
 			
 			glfwSwapBuffers(window);
 		}
