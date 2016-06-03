@@ -91,39 +91,37 @@ void Train::Draw()
 
 void Train::Go()
 {
-	speedAngle += 15 * JPGLHelper::deltaTime;
+	
+	if (speedAngle < 90.0f)
+			speedAngle += 15 * JPGLHelper::deltaTime;
+	
 	rotation -= speedAngle;
-
-	if (speedAngle > 90.0f)
-		speedAngle = 90.0f;
-
-	if (rotation >= 360.f)
-		rotation -= 360.0f;
+	if (rotation <= -360.f)
+		rotation += 360.0f;
 }
 
 void Train::Back()
 {
+	
+	if (speedAngle > -90.0f)
+		speedAngle -= 15 * JPGLHelper::deltaTime;
 
-
-	speedAngle -= 15 * JPGLHelper::deltaTime;
 	rotation -= speedAngle;
 
-	if (speedAngle < -90.0f)
-		speedAngle = -90.0f;
-
-	if (rotation >= 360.f)
-		rotation -= 360.0f;
+	if (rotation <= 360.f)
+		rotation += 360.0f;
 }
 
 void Train::DoPhysics()
 {
-	const GLfloat step = 300;
+	GLfloat step = 300;
 	location.x += step*glm::sin(glm::radians(speedAngle))*JPGLHelper::deltaTime;
 
 	if (!keyboardManager.keys[GLFW_KEY_A] && !keyboardManager.keys[GLFW_KEY_Z])
 	if (glm::abs(speedAngle) > 0.0000005)
 	{
-		speedAngle -= speedAngle  * JPGLHelper::deltaTime;
-		rotation -= (rotation)*speedAngle*JPGLHelper::deltaTime;
+		step = speedAngle  * JPGLHelper::deltaTime;
+		speedAngle -= step;
+		rotation -= step*15;
 	}
 }
