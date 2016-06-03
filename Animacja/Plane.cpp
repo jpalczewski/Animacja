@@ -1,5 +1,6 @@
 #include "Plane.h"
 #include <array>
+#include <glm/gtx/transform.hpp>
 
 static GLfloat rectangle[] = {
 	0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
@@ -8,12 +9,12 @@ static GLfloat rectangle[] = {
 	-0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
 };
 
-Plane::Plane(GLuint _shaderID, GLuint _verticesPerSide) : verticesPerSide(_verticesPerSide)
+Plane::Plane(GLuint _shaderID, GLuint _verticesPerSide) : verticesPerSide(_verticesPerSide), shaderID(_shaderID)
 {
 	std::array<GLfloat, 2> texCoord_x = { 0.0f, 1.0f };
 	std::array<GLfloat, 2> texCoord_y = { 1.0f, 0.0f };
 
-	GLint texAttrib, posAttrib;
+	GLint texAttrib, posAttrib, normalAttrib;
 	
 	GLuint	xSize = _verticesPerSide,
 		ySize = _verticesPerSide,
@@ -24,7 +25,7 @@ Plane::Plane(GLuint _shaderID, GLuint _verticesPerSide) : verticesPerSide(_verti
 	GLfloat positionRange = 10.0f;
 
 	GLfloat xPos, yPos, xRatio, yRatio;
-	glm::vec3 normal = glm::normalize(glm::cross(glm::vec3(1.0f,0.0f,0.0f),  glm::vec3(0.0,1.0,0.0)));
+	glm::vec3 normal =glm::vec3(0.0f, 0.0f, 1.0f);
 
 	vertices.resize(vertexTableSize, 0.0f);
 	
@@ -93,6 +94,10 @@ Plane::Plane(GLuint _shaderID, GLuint _verticesPerSide) : verticesPerSide(_verti
 	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, floatsPerVertex * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(texAttrib);
 
+	normalAttrib = glGetAttribLocation(_shaderID, "normal");
+	glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE, floatsPerVertex * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(normalAttrib);
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
@@ -108,11 +113,23 @@ Plane::~Plane()
 
 void Plane::Draw(MatrixWrapper & model)
 {
+	//MatrixWrapper modelNormal(shaderID, "modelNormal");
+
+	glm::mat3 modelToSend;
+	glm::mat4 modelNormal = model.mat4;
+	modelNormal = glm::inverse(modelNormal);
+	modelNormal = glm::transpose(modelNormal);
+	
+	modelToSend = glm::mat3(modelNormal);
+
+	glUniform1f(glGetUniformLocation(shaderID, "material.shininess"), 32.0f);
+	glUniform1i(glGetUniformLocation(shaderID, "material.texture"), 0);
+
 	glBindVertexArray(VAO);
 
 	model.SendToGPU();
+	glUniformMatrix3fv(glGetUniformLocation(shaderID, "modelNormal"), 1, GL_FALSE, glm::value_ptr(modelToSend));
 
-//	glDrawArrays(GL_TRIANGLE_STRIP, 0, (GLuint)_countof(rectangle));
 	glDrawElements(GL_TRIANGLE_STRIP, indexes.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }

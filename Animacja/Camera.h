@@ -13,7 +13,6 @@ class Camera
 	MatrixWrapper view;
 
 	glm::vec3 target;
-	glm::vec3 cameraPosition;
 	glm::vec3 cameraUp;
 	GLfloat distance;
 	GLfloat yaw;
@@ -36,5 +35,7 @@ public:
 	void UpdateTargetPosition(glm::vec3 & targetPos);
 	void SendUpdatedMatrix();
 
+
+	glm::vec3 cameraPosition;
 };
 

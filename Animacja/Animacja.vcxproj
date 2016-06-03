@@ -70,6 +70,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="JPGLHelper.cpp" />
     <ClCompile Include="KeyboardManager.cpp" />
@@ -85,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="JPGLHelper.h" />
     <ClInclude Include="KeyboardManager.h" />

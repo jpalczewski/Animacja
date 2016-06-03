@@ -4,6 +4,8 @@
 #include <exception>
 #include <iostream>
 #include <SOIL.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class JPGLHelper {
 public:
@@ -12,6 +14,19 @@ public:
 
 
 	static GLFWwindow* InitEverything(int height, int width);
+
+	static void SendNormalModel(glm::mat4  model, GLuint _where)
+	{
+		glm::mat3 modelToSend;
+		model = glm::inverse(model);
+		model = glm::transpose(model);
+
+		modelToSend = glm::mat3(model);
+
+		glUniform1f(glGetUniformLocation(_where, "material.shininess"), 32.0f);
+		glUniformMatrix3fv(glGetUniformLocation(_where, "modelNormal"), 1, GL_FALSE, glm::value_ptr(modelToSend));
+
+	}
 
 	static GLuint LoadTexture(const char* filename)
 	{

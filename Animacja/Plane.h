@@ -7,6 +7,7 @@
 
 class Plane
 {
+	GLuint shaderID;
 	GLuint VAO;
 	GLuint VBO;
 	GLuint EBO;
