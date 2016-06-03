@@ -18,7 +18,7 @@
 #include "Camera.h"
 
 #include "Train.h"
-#include "Truss.h"
+#include "Light.h"
 
 const int HEIGHT = 800;
 const int WIDTH = 600;
@@ -31,6 +31,8 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
 int main()
 {
+
+	glm::vec3 cross = glm::cross(glm::vec3(2.5, 2.5, 0),glm::vec3(0, 2.5, 0));
 	try
 	{
 		GLfloat currentFrame;
@@ -49,17 +51,18 @@ int main()
 						projection(shaderGround.GetProgramID(), "projection");
 
 		modelPlane.mat4	= glm::rotate(modelPlane.mat4, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		projection.mat4 = glm::perspective(glm::radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 500.0f);
+		projection.mat4 = glm::perspective(glm::radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 2500.0f);
 
 		Camera camera(-180.0f, 180.0f, 0.0f, 360.0f, 5.0f, shaderGround.GetProgramID(), 25.0f);
 		
 		camera.UpdateTargetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
-		modelPlane.mat4 = glm::scale(modelPlane.mat4, glm::vec3(10.0f, 10.0f, 0));
+		modelPlane.mat4 = glm::scale(modelPlane.mat4, glm::vec3(300.0f,300.0f, 1.0f));
 		modelIdentity.mat4 = glm::mat4(1.0f);
 		
 		Plane ground(shaderGround.GetProgramID(),32);
 		Train train(shaderTrain.GetProgramID());
+		Light light;
 	
 		TextureWrapper groundTexture(GL_TEXTURE0, shaderGround.GetProgramID(), "ground.png", "Texture0");
 
@@ -73,6 +76,12 @@ int main()
 
 		keyboardManager.RegisterKey(GLFW_KEY_A, std::bind(&Train::Go, std::ref(train)));
 		keyboardManager.RegisterKey(GLFW_KEY_Z, std::bind(&Train::Back, std::ref(train)));
+
+
+		keyboardManager.RegisterKey(GLFW_KEY_S, std::bind(&Light::AmbientUp, std::ref(light)));
+		keyboardManager.RegisterKey(GLFW_KEY_X, std::bind(&Light::AmbientDown, std::ref(light)));
+		keyboardManager.RegisterKey(GLFW_KEY_D, std::bind(&Light::DiffuseUp, std::ref(light)));
+		keyboardManager.RegisterKey(GLFW_KEY_C, std::bind(&Light::DiffuseDown, std::ref(light)));
 
 		glEnable(GL_MULTISAMPLE);
 		glEnable(GL_DEPTH_TEST);
@@ -90,7 +99,7 @@ int main()
 			camera.UpdateTargetPosition(train.GetLocation());
 			train.DoPhysics();
 
-			glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
+			glClearColor(light.InterpolateR(), light.InterpolateG(), light.InterpolateB(), 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			/*
@@ -102,6 +111,8 @@ int main()
 			groundTexture.SendToGPU();
 
 			shaderGround.Execute();
+
+			light.UpdateLight(shaderGround.GetProgramID(), camera.cameraPosition);
 
 			camera.UpdateShader(shaderGround.GetProgramID());
 			camera.SendUpdatedMatrix();
@@ -119,7 +130,7 @@ int main()
 			*/
 
 			shaderTrain.Execute();
-			
+			light.UpdateLight(shaderTrain.GetProgramID(), camera.cameraPosition);
 			camera.UpdateShader(shaderGround.GetProgramID());
 			camera.SendUpdatedMatrix();
 			

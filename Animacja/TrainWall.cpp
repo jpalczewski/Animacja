@@ -14,7 +14,7 @@ TrainWall::TrainWall(GLuint _shaderID, GLuint _verticesPerSide)
 	GLfloat positionRange = 10.0f;
 
 	GLfloat xPos, yPos, xRatio, yRatio;
-	glm::vec3 normal = glm::normalize(glm::cross(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0, 1.0, 0.0)));
+	glm::vec3 normal = glm::vec3(0.0f, 0.0f, 1.0f);
 	glm::vec3 color;
 	vertices.resize(vertexTableSize, 0.0f);
 
@@ -76,6 +76,11 @@ TrainWall::TrainWall(GLuint _shaderID, GLuint _verticesPerSide)
 	colorsAttrib = glGetAttribLocation(_shaderID, "color");
 	glVertexAttribPointer(colorsAttrib, 3, GL_FLOAT, GL_FALSE, floatsPerVertex * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(colorsAttrib);
+
+	colorsAttrib = glGetAttribLocation(_shaderID, "normal");
+	glVertexAttribPointer(colorsAttrib, 3, GL_FLOAT, GL_FALSE, floatsPerVertex * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(colorsAttrib);
+
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);

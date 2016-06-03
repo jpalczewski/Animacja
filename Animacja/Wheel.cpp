@@ -35,7 +35,7 @@ Wheel::Wheel(int _vertices, int _shaderID) : verticesCount(_vertices)
 	 addVertex(vertices, 
 		 rLength*glm::sin(glm::radians(offset*stepInAngle)), 
 		 rLength*glm::cos(glm::radians(offset*stepInAngle)), 
-		 -zOffset, 0.0f, 0.0f, 1.0f, 
+		 -zOffset, 0.0f, 0.0f, -1.0f, 
 		 1-glm::sin(2 * glm::pi<GLfloat>()* offset / _vertices), glm::cos(2 * glm::pi<GLfloat>()* offset / _vertices), offset / _vertices);
 	}
 

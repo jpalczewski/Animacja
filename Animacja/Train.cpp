@@ -66,10 +66,14 @@ void Train::Draw()
 		model.mat4 = glm::translate(model.mat4, location);
 		model.mat4 *= models[i];
 		if (i < 6)
+		{
+			JPGLHelper::SendNormalModel(model.mat4, shaderID);
 			walls[i].Draw(model);
+		}
 		else if (i < 10)
 		{
 			model.mat4 = glm::rotate(model.mat4, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+			JPGLHelper::SendNormalModel(model.mat4, shaderID);
 			wheels[i - 6].Draw(model);
 		}
 		else
@@ -81,6 +85,8 @@ void Train::Draw()
 				0.0f
 							)
 				);
+
+			JPGLHelper::SendNormalModel(model.mat4, shaderID);
 			truss[i - 10].Draw(model);
 		}
 	}

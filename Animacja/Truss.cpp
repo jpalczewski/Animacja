@@ -18,20 +18,20 @@ static  inline void addVertex(std::vector<GLfloat> & where, GLfloat x, GLfloat y
 Truss::Truss(GLuint _shaderID)
 {
 	glGetError();
-	GLuint posAttrib, colorsAttrib, floatsPerVertex = 9;
+	GLuint posAttrib, colorsAttrib,normalAttrib, floatsPerVertex = 9;
 
 	vertices.reserve(8);
 
-	addVertex(vertices, 5.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-	addVertex(vertices, 5.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f);
-	addVertex(vertices, 5.5f, 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-	addVertex(vertices, 5.5f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+	addVertex(vertices, 5.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+	addVertex(vertices, 5.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f);
+	addVertex(vertices, 5.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	addVertex(vertices, 5.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
 
-	addVertex(vertices, -5.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-	addVertex(vertices, -5.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-	addVertex(vertices, -5.5f, 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-	addVertex(vertices, -5.5f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f);
+	addVertex(vertices, -5.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+	addVertex(vertices, -5.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	addVertex(vertices, -5.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+	addVertex(vertices, -5.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f);
 	indexes = { 0, 1, 2,
 	2,3,0,
 
@@ -72,8 +72,13 @@ Truss::Truss(GLuint _shaderID)
 	glVertexAttribPointer(colorsAttrib, 3, GL_FLOAT, GL_FALSE, floatsPerVertex * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(colorsAttrib);
 
+
+	normalAttrib = glGetAttribLocation(_shaderID, "normal");
+	glVertexAttribPointer(normalAttrib, 3, GL_FLOAT, GL_FALSE, floatsPerVertex * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(normalAttrib);
+
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
 	
