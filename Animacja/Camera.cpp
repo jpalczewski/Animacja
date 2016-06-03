@@ -72,5 +72,5 @@ void Camera::SendUpdatedMatrix()
 	view.mat4 = glm::lookAt(cameraPosition, target, cameraUp);
 	view.SendToGPU();
 
-	std::cout << "\ryaw:" << yaw << "\tpitch:" << pitch << "\tup: " << cameraUp.y;
+	//std::cout << "\ryaw:" << yaw << "\tpitch:" << pitch << "\tup: " << cameraUp.y;
 }
